@@ -11,10 +11,6 @@ const ProductoBoton = () => {
             variant="contained"
             size="small"
             sx={{ mt: 2, width: 140, height: 25 }}
-            onClick={() => {
-              count = count + 1;
-              console.log(count);
-            }}
           >
             <Typography variant="button">Agregar</Typography>
           </Button>

@@ -11,6 +11,8 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.4",
+    "@next-tools/dynamic": "^0.0.11",
+    "axios": "^0.24.0",
     "js-cookie": "^3.0.1",
     "mongoose": "^6.1.2",
     "next": "12.0.7",

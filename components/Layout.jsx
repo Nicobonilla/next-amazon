@@ -9,18 +9,17 @@ import {
   Link,
   Box,
   CssBaseline,
-  Switch
+  Switch,
+  Badge,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/system';
 import { createTheme } from '@mui/material/styles';
 import { Store } from '../utils/Store';
 import Cookies from 'js-cookie';
 
-
 export default function Layout({ title, description, children }) {
-  
   const { state, dispatch } = useContext(Store);
-  const { darkMode } = state
+  const { darkMode, cart } = state;
 
   const theme = createTheme({
     typography: {
@@ -50,10 +49,10 @@ export default function Layout({ title, description, children }) {
   });
 
   const darkModeChangeHandler = () => {
-    dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON'})
-    const newDarkMode = !darkMode
-    Cookies.set('darkMode', newDarkMode ? 'ON':'OFF')
-  }
+    dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
+    const newDarkMode = !darkMode;
+    Cookies.set('darkMode', newDarkMode ? 'ON' : 'OFF');
+  };
 
   return (
     <div>
@@ -85,12 +84,22 @@ export default function Layout({ title, description, children }) {
             </NextLink>
 
             <div>
-              <Switch checked={darkMode} onChange={darkModeChangeHandler}> </Switch>
+              <Switch checked={darkMode} onChange={darkModeChangeHandler}>
+                {' '}
+              </Switch>
               <NextLink href="/cart" passHref>
-                Cart
+                <Link>
+                  {cart.cartItems.length > 0 ? (
+                    <Badge color="secondary" badgeContent={cart.cartItems.length}>
+                      Cart
+                    </Badge>
+                  ) : (
+                    'Cart'
+                  )}
+                </Link>
               </NextLink>
               <NextLink href="/login" passHref>
-                Login
+                <Link>Login</Link>
               </NextLink>
             </div>
           </Toolbar>
