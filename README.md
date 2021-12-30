@@ -1,12 +1,12 @@
 ## This is a e-commerce project using: 
 
 ## Technologies
-NextJS
-Material UI
-Vercel
-Cloudinary
-Paypal
-GoogleMaps
+* NextJS
+* Material UI
+* Vercel
+* Cloudinary
+* Paypal
+* GoogleMaps
 
 
 ## Getting Started
