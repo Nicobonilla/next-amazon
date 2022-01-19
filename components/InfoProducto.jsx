@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material';
+import NumberFormat from 'react-number-format';
 
 const InfoProducto = ({ name, price, discount }) => {
   return (
@@ -11,7 +12,15 @@ const InfoProducto = ({ name, price, discount }) => {
       <Typography>
         <Box> {name} </Box>
         <Box> Medida </Box>
-        <Box> ${price} label</Box>
+        <Box>
+          <NumberFormat
+            value={price}
+            displayType="text"
+            prefix="$"
+            decimalSeparator={','}
+            thousandSeparator={'.'}
+          />
+        </Box>
         <Box> {discount} </Box>
       </Typography>
     </>

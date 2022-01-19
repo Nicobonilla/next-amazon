@@ -8,7 +8,7 @@ import {
   Link,
 } from '@mui/material';
 import NextLink from 'next/link';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Layout from '../components/Layout';
 import axios from 'axios';
 import { Store } from '../utils/Store';
@@ -17,15 +17,17 @@ import Cookies from 'js-cookie';
 import { Controller, useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
-export default function Login() {
+export default function Register() {
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm();
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const router = useRouter();
-  const { redirect } = router.query; //login?redirect=/shipping
+  const { redirect } = router.query;
   const { state, dispatch } = useContext(Store);
   const { userInfo } = state;
 
@@ -35,15 +37,25 @@ export default function Login() {
     }
   }, []);
 
-  const submitHandler = async ({ email, password }) => {
-    closeSnackbar()
-    // th
+  /* const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');*/
+
+  const submitHandler = async ({ name, email, password, confirmPassword }) => {
+    closeSnackbar();
+    if (password !== confirmPassword) {
+      enqueueSnackbar('Las contraseñas no cohinciden', { variant: 'error' });
+      return;
+    }
     try {
-      const { data } = await axios.post('/api/users/login', {
+      const { data } = await axios.post('/api/users/register', {
+        name,
         email,
         password,
       });
       dispatch({ type: 'USER_LOGIN', payload: data });
+      Cookies.set('userInfo', data);
       router.push(redirect || '/');
     } catch (err) {
       enqueueSnackbar(
@@ -53,9 +65,8 @@ export default function Login() {
     }
   };
   return (
-    <Layout title="Login">
+    <Layout title="Registrarse">
       <Grid
-        sx={{ pt: 10 }}
         container
         direction="column"
         justifyContent="center"
@@ -63,9 +74,39 @@ export default function Login() {
       >
         <form onSubmit={handleSubmit(submitHandler)}>
           <Typography component="h1" variant="h1">
-            Login
+            Registrarse
           </Typography>
           <List>
+            <ListItem>
+              <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: true,
+                  minLength: 2,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    id="name"
+                    label="Nombre Usuario"
+                    inputProps={{ type: 'name' }}
+                    error={Boolean(errors.name)}
+                    helperText={
+                      errors.name
+                        ? errors.name.type === 'minLength'
+                          ? 'El nombre de usuario debe tener más de 1 caracter'
+                          : 'El nombre es obligatorio'
+                        : ''
+                    }
+                    {...field}
+                  ></TextField>
+                )}
+              ></Controller>
+            </ListItem>
+
             <ListItem>
               <Controller
                 name="email"
@@ -116,8 +157,38 @@ export default function Login() {
                     helperText={
                       errors.password
                         ? errors.password.type === 'minLength'
-                          ? 'El largo de la contraseña es mayor a 5 caracteres'
-                          : 'Debe ingresar su contraseña'
+                          ? 'La contraseña debe tener al menos 6 caracteres'
+                          : 'Ingrese su contraseña'
+                        : ''
+                    }
+                    {...field}
+                  ></TextField>
+                )}
+              ></Controller>
+            </ListItem>
+
+            <ListItem>
+              <Controller
+                name="confirmPassword"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: true,
+                  minLength: 6,
+                }}
+                render={({ field }) => (
+                  <TextField
+                    variant="outlined"
+                    fullWidth
+                    id="confirmPassword"
+                    label="Confirmár contraseña"
+                    inputProps={{ type: 'password' }}
+                    error={Boolean(errors.confirmPassword)}
+                    helperText={
+                      errors.confirmPassword
+                        ? errors.confirmPassword.type === 'minLength'
+                          ? 'La contraseña tiene más de 5 caracteres'
+                          : 'La confirmación de la contraseña es obligatoria'
                         : ''
                     }
                     {...field}
@@ -133,14 +204,14 @@ export default function Login() {
                 fullWidth
                 color="primary"
               >
-                Login
+                Registrarse
               </Button>
             </ListItem>
 
             <ListItem>
-              Aún no tienes una cuenta ? &nbsp;
-              <NextLink href={`/register?redirect=${redirect || '/'}`} passHref>
-                <Link>Registrarse</Link>
+              Ya tienes una cuenta? &nbsp;
+              <NextLink href={`/login?redirect=${redirect || '/'}`} passHref>
+                <Link>Ingresar</Link>
               </NextLink>
             </ListItem>
           </List>

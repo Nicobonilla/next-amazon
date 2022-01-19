@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import Layout from '../components/Layout';
+import Layout from '../components/Layout.jsx';
 
 import { useState, useEffect, useContext } from 'react';
 import { Container, Box, Grid, Typography, Button } from '@mui/material';
@@ -13,6 +13,7 @@ import Product from '../models/Product';
 import axios from 'axios';
 import { Store } from '../utils/Store';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 export default function Home(props) {
   const router = useRouter();
@@ -36,14 +37,14 @@ export default function Home(props) {
     <>
       <Layout>
         <h1> Products</h1>
-        <Grid container spacing={0} maxWidth="sm">
+        <Grid container spacing={0} maxWidth="lg">
           {!products
             ? 'No encuentra productos'
             : products.map((producto) => {
                 let { id, name, urlImage, price, discount, slug, category } =
                   producto;
                 return (
-                  <Grid item xs={6} key={id}>
+                  <Grid item  xs={6} sm={4} md={4} lg={3} xl={3} key={id}>
                     <ItemProducto slug={slug}>
                       <ImagenProducto urlImage={urlImage} />
                       <InfoProducto

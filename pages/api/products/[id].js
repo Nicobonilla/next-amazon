@@ -1,6 +1,8 @@
+// CREATE AN API FOR ORDER DETAILS
 import nc from 'next-connect';
 import db from '../../../utils/db';
-import Product from '../../../models/Product.js';
+import Product from '../../../models/Product';
+
 const handler = nc();
 
 handler.get(async (req, res) => {
